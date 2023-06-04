@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>上传文件</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<h2>上传文件或者文本</h2>
+
+<form action="http://localhost:8081/uploadFile" method="post" enctype="multipart/form-data">
+    <h3>上传文件:</h3>
+    <input type="file" name="file" id="file">
+    <input type="submit" value="上传文件" name="submit">
+</form>
+
+<form action="http://localhost:8081/uploadText" method="post" enctype="multipart/form-data">
+    <h3>输入文本:</h3>
+    <textarea name="text" id="text"></textarea>
+    <input type="submit" value="提交文本" name="submit">
+</form>
+
+</body>
+</html>
