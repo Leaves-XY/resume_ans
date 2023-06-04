@@ -6,10 +6,10 @@ import springfox.documentation.oas.annotations.EnableOpenApi;
 
 @EnableOpenApi
 @SpringBootApplication
-public class ResumApplication {
+public class ResumeApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ResumApplication.class, args);
+        SpringApplication.run(ResumeApplication.class, args);
     }
 
 }
