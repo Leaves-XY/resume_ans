@@ -22,3 +22,8 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: ASSIGN_ID
+
+resume:
+  tencent:
+    SecretId: AKIDd8PUO6aAD6mHdppbliV92h8PTO5YqxGM
+    SecretKey: OwISRGMGyYzDG8pnZ81oUwCF5j8JIBtW

@@ -26,13 +26,12 @@ public class FileController {
     FileService fileService;
 
 
-
     /**
      * @Description 上传文件
      * @param file
      * @return
      */
-    @ApiOperation(value = "上传简历文件(doc、text、pdf)")
+    @ApiOperation(value = "上传简历文件(doc、text、pdf、png、jpg)")
     @ApiImplicitParam(name = "file", value = "文件", required = true, dataType = "__file")
     @PostMapping("/uploadFile")
     public R<String> uploadFile(@RequestParam("file") MultipartFile file) {
@@ -49,7 +48,7 @@ public class FileController {
             text = fileService.extractTextFromTextFile(file);
         } else if (contentType.startsWith("image/")) {
             // 文件是图片
-            return R.error("暂时不支持图片文件");
+            text=fileService.extractTextFromImage(file);
         } else {
             // 文件类型未知或不支持
             return R.error("请读入支持的文件类型");

@@ -1,16 +1,16 @@
 package com.yxy.resume.service.impl;
 
+import com.yxy.resume.Tencent.GeneralBasicOCR;
 import com.yxy.resume.service.FileService;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import com.yxy.resume.until.FileCovert;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+
 
 /**
  * @ClassName FileServiceImp
@@ -21,6 +21,10 @@ import java.util.List;
 
 @Service
 public class FileServiceImpl implements FileService {
+
+    @Autowired
+    GeneralBasicOCR generalBasicOCR ;
+
     /**
      * @Description 从 PDF 文件中提取文本
      * @param file
@@ -29,25 +33,13 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     public String extractTextFromPdf(MultipartFile file) {
-        PDFTextStripper pdfStripper = null;
-        PDDocument pdDocument = null;
-        String text = null;
         try {
-            pdfStripper = new PDFTextStripper();
-            pdDocument = PDDocument.load(file.getInputStream());
-            text = pdfStripper.getText(pdDocument);
+            File file1=FileCovert.convertMultipartFileToFile(file);
+            return generalBasicOCR.covert(file1);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (pdDocument != null) {
-                try {
-                    pdDocument.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        return text;
+        return null;
     }
 
 
@@ -66,13 +58,12 @@ public class FileServiceImpl implements FileService {
             String line;
             while ((line = reader.readLine()) != null) {
                 builder.append(line);
-                builder.append(System.lineSeparator());
             }
         } catch (IOException e) {
             // 这里可以根据你的需求对异常进行处理，比如打印异常信息，或者将异常封装后重新抛出
             e.printStackTrace();
         }
-        return builder.toString();
+        return builder.toString().replaceAll("\\s", "").replaceAll("\\n", "");
     }
 
     /**
@@ -83,37 +74,29 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     public String extractTextFromDocxFile(MultipartFile file) {
-        StringBuilder text = new StringBuilder();
-        InputStream fis = null;
-        XWPFDocument document = null;
         try {
-            fis = file.getInputStream();
-            document = new XWPFDocument(fis);
-            List<XWPFParagraph> paragraphs = document.getParagraphs();
-            for (XWPFParagraph para : paragraphs) {
-                text.append(para.getText());
-            }
+            File file1=FileCovert.convertMultipartFileToFile(file);
+            File pdfFile=FileCovert.docxConvertPdf(file1);
+            return generalBasicOCR.covert(pdfFile);
         } catch (IOException e) {
-            // 异常处理，比如打印异常信息
             e.printStackTrace();
-        } finally {
-            // 确保 fis 在任何情况下都会被关闭
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            // 确保 document 在任何情况下都会被关闭
-            if (document != null) {
-                try {
-                    document.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        return text.toString();
+
+        return null;
+    }
+
+    /**
+     * @Description 从图片中提取文本
+     * @param file
+     * @return
+     */
+    public String extractTextFromImage(MultipartFile file) {
+        try {
+            File file1=FileCovert.convertMultipartFileToFile(file);
+            return generalBasicOCR.covert(file1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
