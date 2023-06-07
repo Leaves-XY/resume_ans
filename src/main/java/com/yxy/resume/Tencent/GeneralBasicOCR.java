@@ -10,7 +10,7 @@ import com.tencentcloudapi.ocr.v20181119.models.GeneralBasicOCRResponse;
 import com.yxy.resume.until.GeneralBasicToText;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import java.io.File;
 import java.io.IOException;
