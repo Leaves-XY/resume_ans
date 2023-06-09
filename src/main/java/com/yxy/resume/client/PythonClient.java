@@ -1,7 +1,12 @@
 package com.yxy.resume.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yxy.resume.dto.ResumeDto;
+import com.yxy.resume.dto.dtoMapper.ResumeDtoMapper;
+import com.yxy.resume.pojo.Resume;
+import com.yxy.resume.service.ResumeService;
 import io.swagger.annotations.Api;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -20,7 +25,7 @@ import java.util.List;
  */
 @Api(value = "发送给python的数据")
 public class PythonClient {
-    private String url;
+
 
     /**
      * 发送给python的数据
@@ -28,7 +33,8 @@ public class PythonClient {
      * @param url python接口的url
      * @return
      */
-    static public String sendPython(String text,String url) {
+    static public String sendPython(String text,String url,ResumeService resumeService) {
+
         RestTemplate restTemplate = new RestTemplate();
 
         // 获取消息转换器列表
@@ -58,9 +64,11 @@ public class PythonClient {
 
             ObjectMapper objectMapper = new ObjectMapper();
             try {
-                PythonResponseTest pythonResponse = objectMapper.readValue(response.getBody(), PythonResponseTest.class);
-                System.out.println(pythonResponse);
-                return pythonResponse.toString();
+                ResumeDto resumeDto = objectMapper.readValue(response.getBody(), ResumeDto.class);
+                Resume resume=ResumeDtoMapper.mapResumeDtoToResume(resumeDto);
+                resumeService.addResume(resume);
+                System.out.println(resume);
+                return "OK";
             } catch (IOException e) {
                 e.printStackTrace();
             }

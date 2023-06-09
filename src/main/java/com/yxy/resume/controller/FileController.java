@@ -3,6 +3,7 @@ package com.yxy.resume.controller;
 import com.yxy.resume.client.PythonClient;
 import com.yxy.resume.common.R;
 import com.yxy.resume.service.FileService;
+import com.yxy.resume.service.ResumeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +27,10 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileController {
     @Autowired
     FileService fileService;
+
+    @Autowired
+    ResumeService resumeService;
+
     @Value("${resume.toPython.url}")
     private String pythonUrl;
 
@@ -56,7 +61,7 @@ public class FileController {
             // 文件类型未知或不支持
             return R.error("请读入支持的文件类型");
         }
-        PythonClient.sendPython(text,pythonUrl);
+        PythonClient.sendPython(text,pythonUrl,resumeService);
 
         return R.success(text);
     }
@@ -69,7 +74,7 @@ public class FileController {
     @PostMapping("/uploadText")
     public R<String> uploadText(@RequestParam("text") String text) {
         text = fileService.plainText(text);
-        PythonClient.sendPython(text,pythonUrl);
+        PythonClient.sendPython(text,pythonUrl,resumeService);
         return R.success(text);
     }
 }

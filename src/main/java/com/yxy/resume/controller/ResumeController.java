@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
 /**
  * <p>
  *  前端控制器
@@ -30,7 +34,8 @@ public class ResumeController {
     @ApiOperation(value = "添加简历")
     @PostMapping()
     public R<String> addResume(@RequestBody Resume resume) {
-        resumeService.save(resume);
+
+        resumeService.addResume(resume);
         return R.success("添加成功");
     }
 

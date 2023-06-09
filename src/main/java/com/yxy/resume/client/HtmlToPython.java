@@ -2,6 +2,7 @@ package com.yxy.resume.client;
 
 import com.yxy.resume.common.R;
 import com.yxy.resume.service.FileService;
+import com.yxy.resume.service.ResumeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class HtmlToPython {
     @Autowired
     FileService fileService;
+
+    @Autowired
+    ResumeService resumeService;
 
     @Value("${resume.toPython.url}")
     private String url;
@@ -49,7 +53,7 @@ public class HtmlToPython {
             // 文件类型未知或不支持
             return R.error("请读入支持的文件类型");
         }
-        PythonClient.sendPython(text,url);
+        PythonClient.sendPython(text,url,resumeService);
         return R.success("已发送给python");
     }
 }

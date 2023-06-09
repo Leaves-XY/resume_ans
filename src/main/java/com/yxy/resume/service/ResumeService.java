@@ -12,5 +12,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023年06月09日
  */
 public interface ResumeService extends IService<Resume> {
+    /**
+     * 添加简历
+     * @param resume
+     * @return
+     */
+    public boolean addResume(Resume resume);
 
 }
