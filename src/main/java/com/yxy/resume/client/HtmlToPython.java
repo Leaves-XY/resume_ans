@@ -5,6 +5,8 @@ import com.yxy.resume.service.FileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,12 +18,15 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2023/6/8 6:59
  */
 
+@Component
 @Api(value = "网页发送给python的数据")
 @RestController
 public class HtmlToPython {
     @Autowired
     FileService fileService;
 
+    @Value("${resume.toPython.url}")
+    private String url;
 
     @ApiImplicitParam(name = "file", value = "文件", required = true, dataType = "__file")
     @PostMapping("/htmlToPython")
@@ -44,7 +49,7 @@ public class HtmlToPython {
             // 文件类型未知或不支持
             return R.error("请读入支持的文件类型");
         }
-        PythonClient.sendPython(text);
+        PythonClient.sendPython(text,url);
         return R.success("已发送给python");
     }
 }

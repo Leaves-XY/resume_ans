@@ -9,6 +9,7 @@ import com.tencentcloudapi.ocr.v20181119.models.GeneralBasicOCRRequest;
 import com.tencentcloudapi.ocr.v20181119.models.GeneralBasicOCRResponse;
 import com.yxy.resume.until.GeneralBasicToText;
 import com.yxy.resume.until.PdfPageCounter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,7 @@ import java.util.Base64;
  * @date 2023/6/7 16:06
  */
 @Component
+@Slf4j
 public class GeneralBasicOCR {
     @Value("${resume.tencent.SecretId}")
     private String SecretId;
@@ -66,7 +68,7 @@ public class GeneralBasicOCR {
                 sb.append(context);
             }
         } catch (TencentCloudSDKException | IOException e) {
-            e.printStackTrace();
+            log.info("腾讯云OCR识别失败: {}", e.getMessage());
         }
         return sb.toString();
     }

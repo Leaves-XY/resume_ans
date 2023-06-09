@@ -1,12 +1,15 @@
 package com.yxy.resume.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.yxy.resume.pojo.Resume;
+import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
+ * <p>
+ *  服务类
+ * </p>
+ *
  * @author YeXingyi
- * @version 1.0
- * @date 2023/6/4 16:36
+ * @since 2023年06月09日
  */
 public interface ResumeService extends IService<Resume> {
 

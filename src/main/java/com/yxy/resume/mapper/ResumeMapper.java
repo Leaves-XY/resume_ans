@@ -1,13 +1,16 @@
 package com.yxy.resume.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.yxy.resume.pojo.Resume;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
+ * <p>
+ *  Mapper 接口
+ * </p>
+ *
  * @author YeXingyi
- * @version 1.0
- * @date 2023/6/4 16:34
+ * @since 2023年06月09日
  */
 @Mapper
 public interface ResumeMapper extends BaseMapper<Resume> {

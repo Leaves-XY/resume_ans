@@ -16,4 +16,7 @@ public interface FileService{
     public String extractTextFromDocxFile(MultipartFile file);
 
     public String extractTextFromImage(MultipartFile file);
+
+    public String plainText(String text);
+
 }

@@ -20,7 +20,15 @@ import java.util.List;
  */
 @Api(value = "发送给python的数据")
 public class PythonClient {
-    static public String sendPython(String text) {
+    private String url;
+
+    /**
+     * 发送给python的数据
+     * @param text 文本
+     * @param url python接口的url
+     * @return
+     */
+    static public String sendPython(String text,String url) {
         RestTemplate restTemplate = new RestTemplate();
 
         // 获取消息转换器列表
@@ -44,7 +52,7 @@ public class PythonClient {
         HttpEntity<String> request = new HttpEntity<>(text, headers);
 
         // 发送POST请求
-        ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:5000/process_text", request, String.class);
+        ResponseEntity<String> response = restTemplate. postForEntity(url, request, String.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
 

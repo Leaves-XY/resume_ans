@@ -99,4 +99,9 @@ public class FileServiceImpl implements FileService {
         }
         return null;
     }
+
+    @Override
+    public String plainText(String text) {
+        return text.replaceAll("\\s", "").replaceAll("\\n", "");
+    }
 }

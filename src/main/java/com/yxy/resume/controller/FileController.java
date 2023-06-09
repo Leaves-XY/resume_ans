@@ -1,5 +1,6 @@
 package com.yxy.resume.controller;
 
+import com.yxy.resume.client.PythonClient;
 import com.yxy.resume.common.R;
 import com.yxy.resume.service.FileService;
 import io.swagger.annotations.Api;
@@ -7,6 +8,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,7 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileController {
     @Autowired
     FileService fileService;
-
+    @Value("${resume.toPython.url}")
+    private String pythonUrl;
 
     /**
      * @Description 上传文件
@@ -53,6 +56,8 @@ public class FileController {
             // 文件类型未知或不支持
             return R.error("请读入支持的文件类型");
         }
+        PythonClient.sendPython(text,pythonUrl);
+
         return R.success(text);
     }
 
@@ -63,6 +68,8 @@ public class FileController {
     @ApiImplicitParam(name = "text", value = "文本", required = true, dataType = "String")
     @PostMapping("/uploadText")
     public R<String> uploadText(@RequestParam("text") String text) {
+        text = fileService.plainText(text);
+        PythonClient.sendPython(text,pythonUrl);
         return R.success(text);
     }
 }

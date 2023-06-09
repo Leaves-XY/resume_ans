@@ -1,15 +1,19 @@
 package com.yxy.resume.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yxy.resume.mapper.ResumeMapper;
-import com.yxy.resume.pojo.Resume;
+import com.yxy.resume.mapper.*;
+import com.yxy.resume.pojo.*;
 import com.yxy.resume.service.ResumeService;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
+ * <p>
+ *  服务实现类
+ * </p>
+ *
  * @author YeXingyi
- * @version 1.0
- * @date 2023/6/4 16:38
+ * @since 2023年06月09日
  */
 @Service
 public class ResumeServiceImpl extends ServiceImpl<ResumeMapper, Resume> implements ResumeService {
