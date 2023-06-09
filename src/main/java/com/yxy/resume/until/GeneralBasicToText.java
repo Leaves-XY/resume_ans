@@ -20,7 +20,7 @@ public class GeneralBasicToText {
             List<JsonNode> textDetections = mapper.convertValue(textDetectionsObject.get("TextDetections"), new TypeReference<List<JsonNode>>() {});
 
             Map<Integer, List<JsonNode>> groupedTextDetections = textDetections.stream()
-                    .collect(Collectors.groupingBy(jsonNode -> getParagNo(jsonNode, mapper)));
+                    .collect(Collectors.groupingBy(jsonNode -> getParagNo(jsonNode, mapper)));  //将具有相同 "ParagNo" 属性值的 JsonNode 对象放入同一个列表中
 
             for (Map.Entry<Integer, List<JsonNode>> entry : groupedTextDetections.entrySet()) {
                 List<JsonNode> sortedGroup = entry.getValue().stream()
@@ -39,8 +39,11 @@ public class GeneralBasicToText {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        String context1=DateUtils.replaceDateFormats(context.toString());
+
         System.out.println(context);
-        return context.toString().replaceAll("\\s", "").replaceAll("\\n", "");
+
+        return context1.toString().replaceAll("\\r", ";").replaceAll("\\n", ";").replaceAll("\\t", ";").replaceAll(" ", "");
     }
 
     private static int getParagNo(JsonNode detection, ObjectMapper mapper) {

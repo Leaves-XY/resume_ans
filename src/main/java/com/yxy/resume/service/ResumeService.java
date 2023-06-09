@@ -19,4 +19,6 @@ public interface ResumeService extends IService<Resume> {
      */
     public boolean addResume(Resume resume);
 
+
+
 }

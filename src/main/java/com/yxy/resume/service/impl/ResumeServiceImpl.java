@@ -4,6 +4,8 @@ import com.yxy.resume.mapper.*;
 import com.yxy.resume.pojo.*;
 import com.yxy.resume.service.ResumeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yxy.resume.until.DateUtils;
+import com.yxy.resume.until.ResumeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +14,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -31,53 +32,14 @@ public class ResumeServiceImpl extends ServiceImpl<ResumeMapper, Resume> impleme
      * @return
      */
     public boolean addResume(Resume resume) {
-        // 定义支持的日期格式列表
-        List<String> dateFormats = Arrays.asList("yyyy.MM", "yyyy-MM", "yyyy/MM", "MM/yyyy", "MM.yyyy", "MM-yyyy", "MM/yyyy", "MM.yyyy", "MM-yyyy", "yyyy.MM.dd", "yyyy-MM-dd", "yyyy/MM/dd", "dd.MM.yyyy", "dd-MM-yyyy", "dd/MM/yyyy");
 
-        String birthDateStr = resume.getBirthday(); // 获取出生年月字符串
+        resume.setAge(ResumeUtils.calculateAge(resume.getBirthday()));
 
-        if(birthDateStr == null || birthDateStr.isEmpty()) {
-            return this.save(resume);
-        }
-
-        LocalDate birthDate = null;
-    // 尝试使用不同的日期格式进行解析
-        for (String format : dateFormats) {
-            try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-                birthDate = LocalDate.parse(birthDateStr, formatter);
-                break; // 解析成功，退出循环
-            } catch (DateTimeParseException e) {
-                continue; // 解析失败，继续尝试下一个日期格式
-            }
-        }
-
-    // 如果解析失败，尝试使用 YearMonth 解析年月，并手动补充默认的日（如 1 号）
-        if (birthDate == null) {
-            for (String format : dateFormats) {
-                try {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-                    YearMonth yearMonth = YearMonth.parse(birthDateStr, formatter);
-                    birthDate = yearMonth.atDay(1); // 补充默认的日
-                    break; // 解析成功，退出循环
-                } catch (DateTimeParseException e) {
-                    continue; // 解析失败，继续尝试下一个日期格式
-                }
-            }
-        }
-
-    // 判断是否成功解析出生日期
-        if (birthDate != null) {
-            // 计算年龄
-            LocalDate currentDate = LocalDate.now();
-            long years = ChronoUnit.YEARS.between(birthDate, currentDate);
-            int age = (int) years;
-
-            // 设置年龄属性
-            resume.setAge(age);
-        }
-
+        resume.setAcademicCareer(ResumeUtils.calculateAcademicCareer(resume.getEducationDegrees()));
+//        resume.setWorkExperience(ResumeUtils.calculateWorkExperience(resume.getJobTimes(),resume.getGraduateDates())); 日期格式化存在问题
         return this.save(resume);
     }
+
+
 
 }
