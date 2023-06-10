@@ -11,6 +11,7 @@ import java.util.Collections;
 
 
 /**
+ * MybatisPlus代码生成器
  * @author YeXingyi
  * @version 1.0
  * @date 2023/6/9 10:20
@@ -46,7 +47,7 @@ public class CodeGeneration {
 //                .dateType(DateType.TIME_PACK)//时间策略
 //                .commentDate("yyyy年MM月dd日")//格式化时间格式
 //                .disableOpenDir()//禁止打开输出目录，默认false
-//                .fileOverride()//覆盖生成文件
+////                .fileOverride()//覆盖生成文件
 //                .build();
 //
 //        /**
@@ -103,7 +104,7 @@ public class CodeGeneration {
 //        StrategyConfig strategyConfig = new StrategyConfig.Builder()
 //                .enableCapitalMode()//开启全局大写命名
 //                //.likeTable()模糊表匹配
-//                .addInclude()//添加表匹配，指定要生成的数据表名，不写默认选定数据库所有表
+//                .addInclude("jobs")//添加表匹配，指定要生成的数据表名，不写默认选定数据库所有表
 //                //.disableSqlFilter()禁用sql过滤:默认(不使用该方法）true
 //                //.enableSchema()启用schema:默认false
 //

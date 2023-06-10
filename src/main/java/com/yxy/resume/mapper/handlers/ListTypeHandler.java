@@ -1,4 +1,4 @@
-package com.yxy.resume.common;
+package com.yxy.resume.mapper.handlers;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;

@@ -25,7 +25,7 @@ public class ResumeServiceImpl extends ServiceImpl<ResumeMapper, Resume> impleme
      * @param resume
      * @return
      */
-    public boolean addResume(Resume resume) {
+    public boolean saveByAnalysis(Resume resume) {
 
         resume.setAge(ResumeUtils.calculateAge(resume.getBirthday()));
 

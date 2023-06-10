@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yxy.resume.mapper.JobsMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yxy.resume.pojo.Jobs">
+        <id column="id" property="id" />
+        <result column="position_name" property="positionName" />
+        <result column="location" property="location" />
+        <result column="salary_range" property="salaryRange" />
+        <result column="education_requirement" property="educationRequirement" />
+        <result column="job_tags" property="jobTags" typeHandler="com.yxy.resume.mapper.handlers.StringTypeHandler"/>
+        <result column="industry" property="industry" />
+        <result column="job_description" property="jobDescription"  />
+        <result column="job_requirement" property="jobRequirement" />
+        <result column="contact_person" property="contactPerson" />
+        <result column="company_name" property="companyName" />
+        <result column="company_address" property="companyAddress" />
+        <result column="company_description" property="companyDescription" />
+        <result column="other_info" property="otherInfo" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, position_name, location, salary_range, education_requirement, job_tags, industry, job_description, job_requirement, contact_person, company_name, company_address, company_description, other_info
+    </sql>
+
+</mapper>

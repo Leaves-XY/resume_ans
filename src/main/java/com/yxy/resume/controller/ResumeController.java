@@ -32,13 +32,14 @@ public class ResumeController {
     @PostMapping()
     public R<String> addResume(@RequestBody Resume resume) {
 
-        resumeService.addResume(resume);
+        resumeService.save(resume);
         return R.success("添加成功");
     }
 
     @ApiOperation(value = "更新简历")
     @PutMapping("/{id}")
-    public R<String> updateResume(@RequestBody Resume resume) {
+    public R<String> updateResume(@RequestParam Long id,@RequestBody Resume resume) {
+        resume.setId(id);
         resumeService.updateById(resume);
         return R.success("更新成功");
     }
@@ -58,7 +59,7 @@ public class ResumeController {
     }
 
     @ApiOperation(value = "获取所有简历")
-    @GetMapping("/list")
+    @GetMapping("/")
     public R<List<Resume>> getAllResume() {
         return R.success(resumeService.list());
     }

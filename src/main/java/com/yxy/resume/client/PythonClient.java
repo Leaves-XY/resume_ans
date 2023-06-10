@@ -6,7 +6,6 @@ import com.yxy.resume.dto.dtoMapper.ResumeDtoMapper;
 import com.yxy.resume.pojo.Resume;
 import com.yxy.resume.service.ResumeService;
 import io.swagger.annotations.Api;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -66,7 +65,7 @@ public class PythonClient {
             try {
                 ResumeDto resumeDto = objectMapper.readValue(response.getBody(), ResumeDto.class);
                 Resume resume=ResumeDtoMapper.mapResumeDtoToResume(resumeDto);
-                resumeService.addResume(resume);
+                resumeService.saveByAnalysis(resume);
                 System.out.println(resume);
                 return "OK";
             } catch (IOException e) {

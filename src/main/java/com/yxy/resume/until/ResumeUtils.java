@@ -108,19 +108,23 @@ public class ResumeUtils {
      */
     public static Integer calculateWorkExperience(List<String> jobTimes,List<String> graduateDates) {
         String targetDate = null;
+        try {
+            if (jobTimes != null && !jobTimes.isEmpty()) {
+                targetDate = findEarliestDate(jobTimes);
+            } else if (graduateDates != null && !graduateDates.isEmpty()) {
+                targetDate = findLatestDate(graduateDates);
+            } else {
+                return 0;
+            }
 
-        if (jobTimes != null && !jobTimes.isEmpty()) {
-            targetDate = findEarliestDate(jobTimes);
-        } else if (graduateDates != null && !graduateDates.isEmpty()) {
-            targetDate = findLatestDate(graduateDates);
-        } else {
+            return calculateDifferenceToCurrentDate(targetDate);
+        }catch (Exception e) {
+            System.out.println("格式错误,计算经验失败");
             return 0;
         }
-
-        return calculateDifferenceToCurrentDate(targetDate);
     }
 
-    private static String findEarliestDate(List<String> dates) {
+    private static String findEarliestDate(List<String> dates) throws Exception{
         String earliestDate = null;
 
         for (String date : dates) {
@@ -132,7 +136,7 @@ public class ResumeUtils {
         return earliestDate.length() > 8 ? earliestDate.substring(0, 8) : earliestDate;
     }
 
-    private static String findLatestDate(List<String> dates) {
+    private static String findLatestDate(List<String> dates) throws Exception{
         String latestDate = null;
 
         for (String date : dates) {

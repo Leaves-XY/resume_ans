@@ -17,7 +17,7 @@ public interface ResumeService extends IService<Resume> {
      * @param resume
      * @return
      */
-    public boolean addResume(Resume resume);
+    public boolean saveByAnalysis(Resume resume);
 
 
 
