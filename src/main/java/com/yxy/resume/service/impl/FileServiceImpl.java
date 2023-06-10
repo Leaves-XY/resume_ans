@@ -2,6 +2,7 @@ package com.yxy.resume.service.impl;
 
 import com.yxy.resume.tencent.GeneralBasicOCR;
 import com.yxy.resume.service.FileService;
+import com.yxy.resume.until.DateUtils;
 import com.yxy.resume.until.FileCovert;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +103,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String plainText(String text) {
-        return text.replaceAll("\\s", "").replaceAll("\\n", "");
+        text= DateUtils.convertDatesAccurateToTheDay(text);
+        return text.replaceAll("\\r", ";").replaceAll("\\n", ";").replaceAll("\\t", ";");
     }
 }

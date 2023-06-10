@@ -150,6 +150,7 @@ public class ResumeUtils {
         }
 
         YearMonth currentDate = YearMonth.now();
+
         YearMonth targetDate = YearMonth.parse(date, FORMATTER);
 
         long monthsDifference = ChronoUnit.MONTHS.between(targetDate, currentDate);

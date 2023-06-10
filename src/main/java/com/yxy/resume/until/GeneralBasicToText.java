@@ -1,5 +1,7 @@
 package com.yxy.resume.until;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -41,7 +43,7 @@ public class GeneralBasicToText {
         }
         String context1=DateUtils.convertDatesAccurateToTheDay(context.toString());
 
-        System.out.println(context1);
+
 
         return context1.toString().replaceAll("\\r", ";").replaceAll("\\n", ";").replaceAll("\\t", ";").replaceAll(" ", "");
     }
@@ -66,4 +68,56 @@ public class GeneralBasicToText {
         JsonNode itemPolygon = detection.get("ItemPolygon");
         return itemPolygon.get("X").asInt();
     }
+
+    public static String generalBasicToTextV2(String json){
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            TextDetections detections = mapper.readValue(json, TextDetections.class);
+
+            String text = detections.textDetections.stream()
+                    .sorted((d1, d2) -> {
+                        int cmpY = Integer.compare(d1.polygon.get(0).Y, d2.polygon.get(0).Y);
+                        if (cmpY != 0) {
+                            return cmpY;
+                        } else {
+                            return Integer.compare(d1.polygon.get(0).X, d2.polygon.get(0).X);
+                        }
+                    })
+                    .map(d -> d.detectedText)
+                    .collect(Collectors.joining("\n"));
+
+            String text1=DateUtils.convertDatesAccurateToTheDay(text.toString());
+
+            return text1.replaceAll("\\r", ";").replaceAll("\\n", ";").replaceAll("\\t", ";").replaceAll(" ", "");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+   static class Coord {
+        public int X;
+        public int Y;
+    }
+
+    static class TextDetection {
+        @JsonProperty("DetectedText")
+        public String detectedText;
+
+        @JsonProperty("Confidence")
+        public int confidence;
+
+        @JsonProperty("Polygon")
+        public List<Coord> polygon;
+    }
+
+    static class TextDetections {
+        @JsonProperty("TextDetections")
+        public List<TextDetection> textDetections;
+    }
+
+
 }
+

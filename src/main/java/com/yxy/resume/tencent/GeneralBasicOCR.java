@@ -63,12 +63,13 @@ public class GeneralBasicOCR {
                 System.out.println(json);
                 System.out.println("-----------------------------------------------------");
 
-                String context = GeneralBasicToText.generalBasicToText(json);
+                String context = GeneralBasicToText.generalBasicToTextV2(json);
                 sb.append(context);
             }
         } catch (TencentCloudSDKException | IOException e) {
             log.info("腾讯云OCR识别失败: {}", e.getMessage());
         }
+        System.out.println(sb);
         return sb.toString();
     }
 }
