@@ -4,17 +4,11 @@ import com.yxy.resume.mapper.*;
 import com.yxy.resume.pojo.*;
 import com.yxy.resume.service.ResumeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.yxy.resume.until.DateUtils;
+
 import com.yxy.resume.until.ResumeUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
 
 /**
  * <p>
@@ -36,7 +30,9 @@ public class ResumeServiceImpl extends ServiceImpl<ResumeMapper, Resume> impleme
         resume.setAge(ResumeUtils.calculateAge(resume.getBirthday()));
 
         resume.setAcademicCareer(ResumeUtils.calculateAcademicCareer(resume.getEducationDegrees()));
-//        resume.setWorkExperience(ResumeUtils.calculateWorkExperience(resume.getJobTimes(),resume.getGraduateDates())); 日期格式化存在问题
+
+        resume.setWorkExperience(ResumeUtils.calculateWorkExperience(resume.getJobTimes(), resume.getGraduateDates()));
+
         return this.save(resume);
     }
 

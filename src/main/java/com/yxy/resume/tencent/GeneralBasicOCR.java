@@ -1,4 +1,4 @@
-package com.yxy.resume.Tencent;
+package com.yxy.resume.tencent;
 
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.exception.TencentCloudSDKException;
@@ -10,7 +10,6 @@ import com.tencentcloudapi.ocr.v20181119.models.GeneralBasicOCRResponse;
 import com.yxy.resume.until.GeneralBasicToText;
 import com.yxy.resume.until.PdfPageCounter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

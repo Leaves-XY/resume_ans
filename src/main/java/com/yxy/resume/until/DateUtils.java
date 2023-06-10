@@ -1,11 +1,15 @@
 package com.yxy.resume.until;
 
 import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,128 +21,124 @@ import java.util.regex.Pattern;
  */
 public class DateUtils {
 
-    public static String replaceDateFormats(String input) {
-        // 定义日期格式的正则表达式
-        String pattern = "(\\d{4}\\.\\d{2}\\.\\d{2}|\\d{4}-\\d{2}-\\d{2}|\\d{4}/\\d{2}/\\d{2}|\\d{2}/\\d{2}/\\d{4}|\\d{4}\\.\\d{2}|\\d{4}-\\d{2}|\\d{4}/\\d{2})";
+    /**
+     * 替换文本中的日期精确到月
+     * @param text
+     * @return
+     */
+    public static String convertDatesAccurateToTheMonth(String text) {
+        // 定义你希望寻找的日期格式
+        String[] datePatterns = {"yyyy.MM", "yyyy-MM", "yyyy/MM"};
+        String[] mmYyyyPatterns = {"MM/yyyy", "MM.yyyy", "MM-yyyy"};
 
-        // 编译正则表达式
-        Pattern regexPattern = Pattern.compile(pattern);
-        Matcher matcher = regexPattern.matcher(input);
-
-        // 逐个匹配并替换日期格式
-        StringBuffer output = new StringBuffer();
-        while (matcher.find()) {
-            String matchedDate = matcher.group(1); // 获取匹配到的日期
-            String replacement = formatDate(matchedDate); // 格式化日期
-            matcher.appendReplacement(output, replacement);
+        // 遍历每种日期格式
+        for(String pattern : datePatterns){
+            text = convertWithPatternAccurateToTheMonth(text, pattern, "\\d{4}[./-]\\d{2}", "yyyy年MM月");
         }
-        matcher.appendTail(output);
 
-        return output.toString();
+        // 单独处理 MM/yyyy，MM.yyyy 和 MM-yyyy 格式
+        for(String pattern : mmYyyyPatterns){
+            text = convertWithPatternAccurateToTheMonth(text, pattern, "\\d{2}[./-]\\d{4}", "yyyy年MM月");
+        }
+
+        return text;
     }
 
-    public static String formatDate(String date) {
-        // 解析日期格式并进行格式化
-        String[] dayFormats = {"yyyy.MM.dd", "yyyy-MM-dd", "yyyy/MM/dd", "MM/dd/yyyy"};
-        String[] monthFormats = {"yyyy.MM", "yyyy-MM", "yyyy/MM", "MM/yyyy"};
-        String dayReplacement = "yyyy年MM月dd日";
-        String monthReplacement = "yyyy年MM月";
+    private static String convertWithPatternAccurateToTheMonth(String text, String datePattern, String regex, String targetPattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
+        // 如果源格式与目标格式相同，需设置lenient为false
+        sdf.setLenient(false);
+        Pattern r = Pattern.compile(regex);
+        Matcher m = r.matcher(text);
 
-        for (String format : dayFormats) {
-            if (date.matches(format)) {
-                return date.replaceAll(format, dayReplacement);
+        while (m.find()) {
+            String dateStr = m.group(0);
+            try {
+                Date date = sdf.parse(dateStr);
+                SimpleDateFormat newFormat = new SimpleDateFormat(targetPattern);
+                String newDateStr = newFormat.format(date);
+                // 使用新的日期格式替换旧的日期格式
+                text = text.replace(dateStr, newDateStr);
+            } catch (ParseException e) {
+                // 如果日期格式不匹配，我们会忽略这个异常，因为我们试图匹配多种日期格式。
+            }
+        }
+        return text;
+    }
+
+    /**
+     * 替换文本日期精确到天
+     * @param text
+     * @return
+     */
+    public static String convertDatesAccurateToTheDay(String text) {
+        //定义日期格式，先处理更精确的日期格式，然后处理只包含年月的日期格式
+        DatePattern[] patterns = new DatePattern[] {
+                new DatePattern("yyyy.MM.dd", "\\d{4}\\.\\d{2}\\.\\d{2}", "yyyy年MM月dd日"),
+                new DatePattern("yyyy-MM-dd", "\\d{4}-\\d{2}-\\d{2}", "yyyy年MM月dd日"),
+                new DatePattern("yyyy/MM/dd", "\\d{4}/\\d{2}/\\d{2}", "yyyy年MM月dd日"),
+                new DatePattern("dd.MM.yyyy", "\\d{2}\\.\\d{2}\\.\\d{4}", "yyyy年MM月dd日"),
+                new DatePattern("dd-MM-yyyy", "\\d{2}-\\d{2}-\\d{4}", "yyyy年MM月dd日"),
+                new DatePattern("dd/MM/yyyy", "\\d{2}/\\d{2}/\\d{4}", "yyyy年MM月dd日"),
+                new DatePattern("yyyy.MM", "\\d{4}\\.\\d{2}", "yyyy年MM月"),
+                new DatePattern("yyyy-MM", "\\d{4}-\\d{2}", "yyyy年MM月"),
+                new DatePattern("yyyy/MM", "\\d{4}/\\d{2}", "yyyy年MM月"),
+                new DatePattern("MM.yyyy", "\\d{2}\\.\\d{4}", "yyyy年MM月"),
+                new DatePattern("MM-yyyy", "\\d{2}-\\d{4}", "yyyy年MM月"),
+                new DatePattern("MM/yyyy", "\\d{2}/\\d{4}", "yyyy年MM月"),
+        };
+
+        for (DatePattern pattern : patterns) {
+            text = convertWithPatternAccurateToTheDay(text, pattern);
+        }
+
+        return text;
+    }
+
+    private static String convertWithPatternAccurateToTheDay(String text, DatePattern datePattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat(datePattern.pattern);
+        sdf.setLenient(false);
+        Pattern r = Pattern.compile(datePattern.regex);
+        Matcher m = r.matcher(text);
+
+        StringBuilder result = new StringBuilder();
+        int lastEnd = 0;
+
+        while (m.find()) {
+            String dateStr = m.group(0);
+            try {
+                Date date = sdf.parse(dateStr);
+                SimpleDateFormat newFormat = new SimpleDateFormat(datePattern.targetPattern);
+                String newDateStr = newFormat.format(date);
+
+                // 添加未更改的部分和新的日期字符串
+                result.append(text, lastEnd, m.start());
+                result.append(newDateStr);
+
+                lastEnd = m.end();
+            } catch (ParseException e) {
+                // 如果日期格式不匹配，我们会忽略这个异常，因为我们试图匹配多种日期格式。
             }
         }
 
-        for (String format : monthFormats) {
-            if (date.matches(format)) {
-                return date.replaceAll(format, monthReplacement);
-            }
-        }
+        // 添加剩余的部分
+        result.append(text.substring(lastEnd));
 
-        return date; // 如果无法匹配任何日期格式，返回原始日期
+        return result.toString();
+    }
+
+    static class DatePattern {
+        String pattern;
+        String regex;
+        String targetPattern;
+
+        DatePattern(String pattern, String regex, String targetPattern) {
+            this.pattern = pattern;
+            this.regex = regex;
+            this.targetPattern = targetPattern;
+        }
     }
 
 
-//    public static final List<String> DATE_FORMATS = Arrays.asList(
-//            "yyyy.MM", "yyyy-MM", "yyyy/MM", "MM/yyyy", "MM.yyyy", "MM-yyyy", "MM/yyyy", "MM.yyyy", "MM-yyyy",
-//            "yyyy.MM.dd", "yyyy-MM-dd", "yyyy/MM/dd", "dd.MM.yyyy", "dd-MM-yyyy", "dd/MM/yyyy"
-//    );
-//
-//    /**
-//     * 转换类里面所有日期属性的格式
-//     * @param object
-//     * @param targetFormat
-//     */
-//    public static void convertDateProperties(Object object, String targetFormat) {
-//        Class<?> clazz = object.getClass();
-//        Field[] fields = clazz.getDeclaredFields();
-//
-//        for (Field field : fields) {
-//            if (field.getType().equals(String.class) && isDateProperty(field.getName(), clazz)) {
-//                field.setAccessible(true);
-//                try {
-//                    String dateString = (String) field.get(object);
-//                    if (dateString != null) {
-//                        LocalDate date = parseDate(dateString);
-//                        String formattedDate = formatDate(date, targetFormat);
-//                        field.set(object, formattedDate);
-//                    }
-//                } catch (IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
-//            } else if (field.getType().equals(List.class) && isDateCollectionProperty(field.getName(), clazz)) {
-//                field.setAccessible(true);
-//                try {
-//                    List<String> dateList = (List<String>) field.get(object);
-//                    if (dateList != null) {
-//                        List<String> formattedDateList = new ArrayList<>();
-//                        for (String dateString : dateList) {
-//                            LocalDate date = parseDate(dateString);
-//                            String formattedDate = formatDate(date, targetFormat);
-//                            formattedDateList.add(formattedDate);
-//                        }
-//                        field.set(object, formattedDateList);
-//                    }
-//                } catch (IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    }
-//
-//    private static boolean isDateProperty(String propertyName, Class<?> clazz) {
-//        // 在此方法中判断指定类的属性是否为日期类型的逻辑，返回true或false
-//        // 根据需要自行实现判断逻辑
-//        return true; // 这里示例简单地返回true，表示所有属性都是日期属性
-//    }
-//
-//    private static boolean isDateCollectionProperty(String propertyName, Class<?> clazz) {
-//        // 在此方法中判断指定类的集合属性是否为日期类型的逻辑，返回true或false
-//        // 根据需要自行实现判断逻辑
-//        return true; // 这里示例简单地返回true，表示所有集合属性都是日期属性
-//    }
-//
-//    private static LocalDate parseDate(String dateString) {
-//        // 在此方法中实现日期字符串的解析逻辑，返回解析后的LocalDate对象
-//        for (String format : DATE_FORMATS) {
-//            try {
-//                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-//                return LocalDate.parse(dateString, formatter);
-//            } catch (DateTimeParseException e) {
-//                // 解析失败，尝试下一个日期格式
-//            }
-//        }
-//        // 如果所有格式都无法解析，则返回null或抛出异常，根据实际情况自行处理
-//        return null;
-//    }
-//
-//    private static String formatDate(LocalDate date, String targetFormat) {
-//        if (date == null) {
-//            return null; // 或者返回一个默认的日期字符串，根据实际需求决定
-//        }
-//        // 在此方法中实现LocalDate对象的格式化逻辑，返回格式化后的日期字符串
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(targetFormat);
-//        return date.format(formatter);
-//    }
+
 }

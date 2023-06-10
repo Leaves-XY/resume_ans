@@ -8,10 +8,7 @@ import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author YeXingyi
@@ -26,36 +23,24 @@ public class ResumeUtils {
      * @return
      */
     public static Integer calculateAge(String birthDateStr) {
-        // 定义支持的日期格式列表
-        List<String> dateFormats = Arrays.asList("yyyy.MM", "yyyy-MM", "yyyy/MM", "MM/yyyy", "MM.yyyy", "MM-yyyy", "MM/yyyy", "MM.yyyy", "MM-yyyy", "yyyy.MM.dd", "yyyy-MM-dd", "yyyy/MM/dd", "dd.MM.yyyy", "dd-MM-yyyy", "dd/MM/yyyy");
-
-        if(birthDateStr == null || birthDateStr.isEmpty()) {
+        if (birthDateStr == null || birthDateStr.isEmpty()) {
             return null;
         }
 
         LocalDate birthDate = null;
-        // 尝试使用不同的日期格式进行解析
-        for (String format : dateFormats) {
+        // 尝试使用日期格式 "yyyy年MM月" 进行解析
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月");
+            YearMonth yearMonth = YearMonth.parse(birthDateStr, formatter);
+            birthDate = yearMonth.atDay(1); // 补充默认的日
+        } catch (DateTimeParseException e) {
+            // 尝试使用日期格式 "yyyy年MM月dd日" 进行解析
             try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日");
                 birthDate = LocalDate.parse(birthDateStr, formatter);
-                break; // 解析成功，退出循环
-            } catch (DateTimeParseException e) {
-                continue; // 解析失败，继续尝试下一个日期格式
-            }
-        }
-
-        // 如果解析失败，尝试使用 YearMonth 解析年月，并手动补充默认的日（如 1 号）
-        if (birthDate == null) {
-            for (String format : dateFormats) {
-                try {
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(format);
-                    YearMonth yearMonth = YearMonth.parse(birthDateStr, formatter);
-                    birthDate = yearMonth.atDay(1); // 补充默认的日
-                    break; // 解析成功，退出循环
-                } catch (DateTimeParseException e) {
-                    continue; // 解析失败，继续尝试下一个日期格式
-                }
+            } catch (DateTimeParseException ex) {
+                // 解析失败，可能是日期格式不正确
+                System.out.println("Invalid date format");
             }
         }
 
@@ -67,6 +52,7 @@ public class ResumeUtils {
             int age = (int) years;
             return age;
         }
+
         return null;
     }
 
@@ -113,19 +99,21 @@ public class ResumeUtils {
         return null;
     }
 
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy年MM月", Locale.CHINA);
     /**
      * 根据工作时间计算工作经验
      * @param jobTimes,graduateDates
      * @return
      */
-    public static Integer calculateWorkExperience( List<String> jobTimes,List<String> graduateDates) {
-
+    public static Integer calculateWorkExperience(List<String> jobTimes,List<String> graduateDates) {
         String targetDate = null;
-        if (jobTimes!=null&&!jobTimes.isEmpty()) {
+
+        if (jobTimes != null && !jobTimes.isEmpty()) {
             targetDate = findEarliestDate(jobTimes);
-        } else if(graduateDates!=null&&!graduateDates.isEmpty()){
+        } else if (graduateDates != null && !graduateDates.isEmpty()) {
             targetDate = findLatestDate(graduateDates);
-        }else{
+        } else {
             return 0;
         }
 
@@ -134,22 +122,26 @@ public class ResumeUtils {
 
     private static String findEarliestDate(List<String> dates) {
         String earliestDate = null;
+
         for (String date : dates) {
-            if (earliestDate == null || date.compareTo(earliestDate) < 0) {
+            if (earliestDate == null || date.substring(0, 8).compareTo(earliestDate) < 0) {
                 earliestDate = date;
             }
         }
-        return earliestDate;
+
+        return earliestDate.length() > 8 ? earliestDate.substring(0, 8) : earliestDate;
     }
 
     private static String findLatestDate(List<String> dates) {
         String latestDate = null;
+
         for (String date : dates) {
-            if (latestDate == null || date.compareTo(latestDate) > 0) {
+            if (latestDate == null || date.substring(0, 8).compareTo(latestDate) > 0) {
                 latestDate = date;
             }
         }
-        return latestDate;
+
+        return latestDate.length() > 8 ? latestDate.substring(0, 8) : latestDate;
     }
 
     private static Integer calculateDifferenceToCurrentDate(String date) {
@@ -158,7 +150,7 @@ public class ResumeUtils {
         }
 
         YearMonth currentDate = YearMonth.now();
-        YearMonth targetDate = YearMonth.parse(date, DateTimeFormatter.ofPattern("yyyy-MM"));
+        YearMonth targetDate = YearMonth.parse(date, FORMATTER);
 
         long monthsDifference = ChronoUnit.MONTHS.between(targetDate, currentDate);
         int yearsDifference = (int) (monthsDifference / 12);

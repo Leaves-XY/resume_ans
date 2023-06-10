@@ -39,9 +39,9 @@ public class GeneralBasicToText {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        String context1=DateUtils.replaceDateFormats(context.toString());
+        String context1=DateUtils.convertDatesAccurateToTheDay(context.toString());
 
-        System.out.println(context);
+        System.out.println(context1);
 
         return context1.toString().replaceAll("\\r", ";").replaceAll("\\n", ";").replaceAll("\\t", ";").replaceAll(" ", "");
     }

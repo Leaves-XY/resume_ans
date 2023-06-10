@@ -1,6 +1,6 @@
 package com.yxy.resume.service.impl;
 
-import com.yxy.resume.Tencent.GeneralBasicOCR;
+import com.yxy.resume.tencent.GeneralBasicOCR;
 import com.yxy.resume.service.FileService;
 import com.yxy.resume.until.FileCovert;
 
