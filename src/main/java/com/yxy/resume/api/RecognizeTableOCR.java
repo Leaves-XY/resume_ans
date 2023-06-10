@@ -1,4 +1,4 @@
-package com.yxy.resume.tencent;
+package com.yxy.resume.api;
 
 import com.tencentcloudapi.common.Credential;
 import com.tencentcloudapi.common.profile.ClientProfile;

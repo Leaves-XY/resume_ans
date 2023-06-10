@@ -7,6 +7,7 @@ import com.yxy.resume.common.R;
 import com.yxy.resume.pojo.Jobs;
 import com.yxy.resume.pojo.Resume;
 import com.yxy.resume.service.JobsService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import java.util.List;
  * @author YeXingyi
  * @since 2023年06月10日
  */
+@Api(tags = "岗位管理")
 @RestController
 @RequestMapping("/jobs")
 public class JobsController {
@@ -28,7 +30,7 @@ public class JobsController {
     private JobsService jobsService;
 
     @ApiOperation(value = "获取全部岗位")
-    @GetMapping("/")
+    @GetMapping("/list")
     public R<List<Jobs>> getAll() {
         return R.success(jobsService.list());
     }

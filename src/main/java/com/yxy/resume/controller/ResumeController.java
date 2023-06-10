@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yxy.resume.common.R;
 import com.yxy.resume.pojo.Resume;
 import com.yxy.resume.service.ResumeService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import java.util.List;
  * @author YeXingyi
  * @since 2023年06月09日
  */
+@Api(tags = "简历管理")
 @RestController
 @RequestMapping("/resume")
 public class ResumeController {
@@ -59,7 +61,7 @@ public class ResumeController {
     }
 
     @ApiOperation(value = "获取所有简历")
-    @GetMapping("/")
+    @GetMapping("/list")
     public R<List<Resume>> getAllResume() {
         return R.success(resumeService.list());
     }

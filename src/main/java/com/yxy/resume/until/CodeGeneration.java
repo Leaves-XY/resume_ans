@@ -104,7 +104,7 @@ public class CodeGeneration {
 //        StrategyConfig strategyConfig = new StrategyConfig.Builder()
 //                .enableCapitalMode()//开启全局大写命名
 //                //.likeTable()模糊表匹配
-//                .addInclude("jobs")//添加表匹配，指定要生成的数据表名，不写默认选定数据库所有表
+//                .addInclude("user")//添加表匹配，指定要生成的数据表名，不写默认选定数据库所有表
 //                //.disableSqlFilter()禁用sql过滤:默认(不使用该方法）true
 //                //.enableSchema()启用schema:默认false
 //

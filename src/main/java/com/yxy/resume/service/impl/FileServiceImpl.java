@@ -1,8 +1,7 @@
 package com.yxy.resume.service.impl;
 
-import com.yxy.resume.tencent.GeneralBasicOCR;
+import com.yxy.resume.api.GeneralBasicOCR;
 import com.yxy.resume.service.FileService;
-import com.yxy.resume.until.DateUtils;
 import com.yxy.resume.until.FileCovert;
 
 import com.yxy.resume.until.OptimizeText;

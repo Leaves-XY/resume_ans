@@ -13,10 +13,12 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 10MB
+
 
 mybatis-plus:
   configuration:
@@ -35,5 +37,9 @@ resume:
   tencent:
     SecretId: AKIDd8PUO6aAD6mHdppbliV92h8PTO5YqxGM
     SecretKey: OwISRGMGyYzDG8pnZ81oUwCF5j8JIBtW
+
+  aliyun:
+    accessKeyId: LTAI5tFp8qRqigbEDRAQaDki
+    accessSecret: kHLnn5vVgDPO7175MsvCDYQbZ8MEN0
 
 

@@ -34,6 +34,7 @@ public class FileController {
     @Value("${resume.toPython.url}")
     private String pythonUrl;
 
+
     /**
      * @Description 上传文件
      * @param file
