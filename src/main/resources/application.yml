@@ -35,5 +35,9 @@ resume:
   tencent:
     SecretId: AKIDd8PUO6aAD6mHdppbliV92h8PTO5YqxGM
     SecretKey: OwISRGMGyYzDG8pnZ81oUwCF5j8JIBtW
+  aliyun:
+    accessKeyId: LTAI5tFp8qRqigbEDRAQaDki
+    accessSecret: kHLnn5vVgDPO7175MsvCDYQbZ8MEN0
+
 
 
