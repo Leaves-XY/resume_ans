@@ -8,7 +8,7 @@ import com.tencentcloudapi.ocr.v20181119.OcrClient;
 import com.tencentcloudapi.ocr.v20181119.models.GeneralBasicOCRRequest;
 import com.tencentcloudapi.ocr.v20181119.models.GeneralBasicOCRResponse;
 import com.yxy.resume.until.GeneralBasicToText;
-import com.yxy.resume.until.PdfPageCounter;
+import com.yxy.resume.until.PdfUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -41,7 +41,7 @@ public class GeneralBasicOCR {
 
 
             // Get number of pages
-            int numPages = PdfPageCounter.getPageCount(file);
+            int numPages = PdfUtils.getPageCount(file);
 
             for (int i = 0; i < numPages; i++) {
                 Credential cred = new Credential(SecretId, SecretKey);

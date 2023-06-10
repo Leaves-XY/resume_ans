@@ -5,6 +5,7 @@ import com.yxy.resume.service.FileService;
 import com.yxy.resume.until.DateUtils;
 import com.yxy.resume.until.FileCovert;
 
+import com.yxy.resume.until.OptimizeText;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -103,7 +104,6 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public String plainText(String text) {
-        text= DateUtils.convertDatesAccurateToTheDay(text);
-        return text.replaceAll("\\r", ";").replaceAll("\\n", ";").replaceAll("\\t", ";");
+        return OptimizeText.optimize(text);
     }
 }

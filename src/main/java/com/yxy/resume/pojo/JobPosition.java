@@ -8,6 +8,5 @@ import lombok.Data;
  * @date 2023/6/9 19:26
  */
 @Data
-
 public class JobPosition {
 }

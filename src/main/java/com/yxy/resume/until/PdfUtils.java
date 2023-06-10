@@ -11,7 +11,7 @@ import java.io.IOException;
  * @version 1.0
  * @date 2023/6/7 23:56
  */
-public class PdfPageCounter {
+public class PdfUtils {
     public static int getPageCount(File pdfFile) {
         int numberOfPages = 0;
         try (PDDocument document = Loader.loadPDF(pdfFile)) {
