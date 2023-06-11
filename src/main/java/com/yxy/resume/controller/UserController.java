@@ -2,7 +2,7 @@ package com.yxy.resume.controller;
 
 
 import com.yxy.resume.common.R;
-import com.yxy.resume.pojo.User;
+import com.yxy.resume.pojo.Account;
 import com.yxy.resume.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -28,8 +28,8 @@ public class UserController {
 
     @ApiOperation(value = "注册")
     @PostMapping("/register")
-    public R<String> register(@RequestBody User user) {
-        userService.register(user);
+    public R<String> register(@RequestBody Account account) {
+        userService.register(account);
         return R.success("注册成功");
     }
 }

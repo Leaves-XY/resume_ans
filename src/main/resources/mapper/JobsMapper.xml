@@ -9,7 +9,7 @@
         <result column="location" property="location" />
         <result column="salary_range" property="salaryRange" />
         <result column="education_requirement" property="educationRequirement" />
-        <result column="job_tags" property="jobTags" typeHandler="com.yxy.resume.mapper.handlers.StringTypeHandler"/>
+        <result column="job_tags" property="jobTags" typeHandler="com.yxy.resume.handler.StringTypeHandler"/>
         <result column="industry" property="industry" />
         <result column="job_description" property="jobDescription"  />
         <result column="job_requirement" property="jobRequirement" />

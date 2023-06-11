@@ -2,6 +2,7 @@ package com.yxy.resume.controller;
 
 import io.swagger.annotations.Api;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,13 +15,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Api(tags = "视图管理")
 @Controller
 public class ViewController {
-    /**
-     * 跳转到指定页面
-     * @param url
-     * @return
-     */
-//    @RequestMapping("/{url}")
-//    public String forwardToStaticPage(@PathVariable("url") String url) {
-//        return "forward:" + url + ".html";
-//    }
+    @GetMapping("/login")
+    public String login() {
+        return "login.html";
+    }
+
+
+    @GetMapping("/register")
+    public String register() {
+        return "register.html";
+    }
+
+    @GetMapping("/admin")
+    public String admin() {
+        return "admin.html";
+    }
 }

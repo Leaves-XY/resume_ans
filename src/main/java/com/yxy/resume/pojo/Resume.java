@@ -10,7 +10,7 @@ import java.util.List;
 
 
 
-import com.yxy.resume.mapper.handlers.StringTypeHandler;
+import com.yxy.resume.handler.StringTypeHandler;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
