@@ -5,6 +5,7 @@ import com.yxy.resume.dto.ResumeDto;
 import com.yxy.resume.dto.dtoMapper.ResumeDtoMapper;
 import com.yxy.resume.pojo.Resume;
 import com.yxy.resume.service.ResumeService;
+import com.yxy.resume.until.OptimizeText;
 import io.swagger.annotations.Api;
 import org.springframework.http.*;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -32,7 +33,7 @@ public class PythonClient {
      * @param url python接口的url
      * @return
      */
-    static public String sendPython(String text,String url,ResumeService resumeService) {
+    static public Resume sendPython(String text,String url,ResumeService resumeService) {
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -53,6 +54,8 @@ public class PythonClient {
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.setAcceptCharset(Collections.singletonList(Charset.forName("UTF-8")));
 
+        text= OptimizeText.removeNonEncodableGBKCharacters(text);
+
         // 封装请求，包括headers和body
         HttpEntity<String> request = new HttpEntity<>(text, headers);
 
@@ -67,7 +70,7 @@ public class PythonClient {
                 Resume resume=ResumeDtoMapper.mapResumeDtoToResume(resumeDto);
                 resumeService.saveByAnalysis(resume);
                 System.out.println(resume);
-                return "OK";
+                return resume;
             } catch (IOException e) {
                 e.printStackTrace();
             }

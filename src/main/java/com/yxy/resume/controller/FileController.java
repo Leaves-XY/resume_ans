@@ -2,6 +2,7 @@ package com.yxy.resume.controller;
 
 import com.yxy.resume.client.PythonClient;
 import com.yxy.resume.common.R;
+import com.yxy.resume.pojo.Resume;
 import com.yxy.resume.service.FileService;
 import com.yxy.resume.service.ResumeService;
 import io.swagger.annotations.Api;
@@ -42,7 +43,7 @@ public class FileController {
     @ApiOperation(value = "上传简历文件(doc、text、pdf、png、jpg)")
     @ApiImplicitParam(name = "file", value = "文件", required = true, dataType = "__file")
     @PostMapping("/uploadFile")
-    public R<String> uploadFile(@RequestParam("file") MultipartFile file) {
+    public R<Resume> uploadFile(@RequestParam("file") MultipartFile file) {
         String contentType = file.getContentType();
         String text = "";
         if (contentType.equals("application/pdf")) {
@@ -61,9 +62,9 @@ public class FileController {
             // 文件类型未知或不支持
             return R.error("请读入支持的文件类型");
         }
-        PythonClient.sendPython(text,pythonUrl,resumeService);
+        Resume resume=PythonClient.sendPython(text,pythonUrl,resumeService);
 
-        return R.success(text);
+        return R.success(resume);
     }
 
     /**
@@ -72,9 +73,10 @@ public class FileController {
     @ApiOperation(value = "上传简历文本")
     @ApiImplicitParam(name = "text", value = "文本", required = true, dataType = "String")
     @PostMapping("/uploadText")
-    public R<String> uploadText(@RequestParam("text") String text) {
+    public R<Resume> uploadText(@RequestParam("text") String text) {
         text = fileService.plainText(text);
-        PythonClient.sendPython(text,pythonUrl,resumeService);
-        return R.success(text);
+        log.info("{}",text);
+        Resume resume=PythonClient.sendPython(text,pythonUrl,resumeService);
+        return R.success(resume);
     }
 }

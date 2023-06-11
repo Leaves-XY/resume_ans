@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author YeXingyi
@@ -38,7 +38,7 @@ public class ResumeController {
 
     @ApiOperation(value = "更新简历")
     @PutMapping("/{id}")
-    public R<String> updateResume(@RequestParam Long id,@RequestBody Resume resume) {
+    public R<String> updateResume(@RequestParam Long id, @RequestBody Resume resume) {
         resume.setId(id);
         resumeService.updateById(resume);
         return R.success("更新成功");
@@ -66,7 +66,7 @@ public class ResumeController {
 
     @ApiOperation(value = "分页查询")
     @GetMapping("/page")
-    public R<IPage> page(int page,int pageSize) {
+    public R<IPage> page(int page, int pageSize) {
         Page<Resume> pageInfo = new Page<>(page, pageSize);
         IPage<Resume> result = resumeService.page(pageInfo);
         return R.success(result);

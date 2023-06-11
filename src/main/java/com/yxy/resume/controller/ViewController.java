@@ -30,4 +30,9 @@ public class ViewController {
     public String admin() {
         return "admin.html";
     }
+
+    @GetMapping("/upload")
+    public String upload() {
+        return "upload.html";
+    }
 }

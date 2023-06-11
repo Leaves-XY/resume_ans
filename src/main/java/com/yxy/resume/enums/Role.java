@@ -9,14 +9,14 @@ import org.slf4j.LoggerFactory;
  * @date 2023/6/10 20:42
  */
 public enum Role {
-    APPLICANT,
-    RECRUITER,
-    ADMIN;
+    APPLICANT, RECRUITER, ADMIN;
 
 
     private static final Logger logger = LoggerFactory.getLogger(Role.class);
+
     /**
      * 大小写不敏感 如果找不到就抛出异常
+     *
      * @param role
      * @return
      */

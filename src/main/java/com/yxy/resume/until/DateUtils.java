@@ -72,21 +72,36 @@ public class DateUtils {
      * @return
      */
     public static String convertDatesAccurateToTheDay(String text) {
-        //定义日期格式，先处理更精确的日期格式，然后处理只包含年月的日期格式
         DatePattern[] patterns = new DatePattern[] {
                 new DatePattern("yyyy.MM.dd", "\\d{4}\\.\\d{2}\\.\\d{2}", "yyyy年MM月dd日"),
                 new DatePattern("yyyy-MM-dd", "\\d{4}-\\d{2}-\\d{2}", "yyyy年MM月dd日"),
                 new DatePattern("yyyy/MM/dd", "\\d{4}/\\d{2}/\\d{2}", "yyyy年MM月dd日"),
-                new DatePattern("dd.MM.yyyy", "\\d{2}\\.\\d{2}\\.\\d{4}", "yyyy年MM月dd日"),
-                new DatePattern("dd-MM-yyyy", "\\d{2}-\\d{2}-\\d{4}", "yyyy年MM月dd日"),
-                new DatePattern("dd/MM/yyyy", "\\d{2}/\\d{2}/\\d{4}", "yyyy年MM月dd日"),
-                new DatePattern("yyyy.MM", "\\d{4}\\.\\d{2}", "yyyy年MM月"),
-                new DatePattern("yyyy-MM", "\\d{4}-\\d{2}", "yyyy年MM月"),
-                new DatePattern("yyyy/MM", "\\d{4}/\\d{2}", "yyyy年MM月"),
-                new DatePattern("MM.yyyy", "\\d{2}\\.\\d{4}", "yyyy年MM月"),
-                new DatePattern("MM-yyyy", "\\d{2}-\\d{4}", "yyyy年MM月"),
-                new DatePattern("MM/yyyy", "\\d{2}/\\d{4}", "yyyy年MM月"),
+                new DatePattern("dd.MM.yyyy", "\\d{2}\\.\\d{2}\\.\\d{4}", "dd日MM月yyyy年"),
+                new DatePattern("dd-MM-yyyy", "\\d{2}-\\d{2}-\\d{4}", "dd日MM月yyyy年"),
+                new DatePattern("dd/MM/yyyy", "\\d{2}/\\d{2}/\\d{4}", "dd日MM月yyyy年"),
+                new DatePattern("yyyy.MM", "\\d{4}\\.\\d{1,2}", "yyyy年MM月"),
+                new DatePattern("yyyy-MM", "\\d{4}-\\d{1,2}", "yyyy年MM月"),
+                new DatePattern("yyyy/MM", "\\d{4}/\\d{1,2}", "yyyy年MM月"),
+                new DatePattern("MM.yyyy", "\\d{1,2}\\.\\d{4}", "MM月yyyy年"),
+                new DatePattern("MM-yyyy", "\\d{1,2}-\\d{4}", "MM月yyyy年"),
+                new DatePattern("MM/yyyy", "\\d{1,2}/\\d{4}", "MM月yyyy年"),
         };
+
+        Pattern rangePattern = Pattern.compile("(\\d{4}[./-]\\d{1,2})[./-](\\d{4}[./-]\\d{1,2})");
+        Matcher rangeMatcher = rangePattern.matcher(text);
+        StringBuffer sb = new StringBuffer();
+        while (rangeMatcher.find()) {
+            String start = rangeMatcher.group(1);
+            String end = rangeMatcher.group(2);
+            String separator = text.substring(rangeMatcher.start() + start.length(), rangeMatcher.start() + start.length() + 1);
+            for (DatePattern pattern : patterns) {
+                start = convertWithPatternAccurateToTheDay(start, pattern);
+                end = convertWithPatternAccurateToTheDay(end, pattern);
+            }
+            rangeMatcher.appendReplacement(sb, start + separator + end);
+        }
+        rangeMatcher.appendTail(sb);
+        text = sb.toString();
 
         for (DatePattern pattern : patterns) {
             text = convertWithPatternAccurateToTheDay(text, pattern);
@@ -110,24 +125,17 @@ public class DateUtils {
                 Date date = sdf.parse(dateStr);
                 SimpleDateFormat newFormat = new SimpleDateFormat(datePattern.targetPattern);
                 String newDateStr = newFormat.format(date);
-
-                // 添加未更改的部分和新的日期字符串
-                result.append(text, lastEnd, m.start());
-                result.append(newDateStr);
-
+                result.append(text, lastEnd, m.start()).append(newDateStr);
                 lastEnd = m.end();
             } catch (ParseException e) {
-                // 如果日期格式不匹配，我们会忽略这个异常，因为我们试图匹配多种日期格式。
+                // do nothing
             }
         }
-
-        // 添加剩余的部分
         result.append(text.substring(lastEnd));
-
         return result.toString();
     }
 
-    static class DatePattern {
+    private static class DatePattern {
         String pattern;
         String regex;
         String targetPattern;
