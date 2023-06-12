@@ -37,35 +37,49 @@ public class GeneralBasicOCR {
     public String covert(File file) {
         StringBuilder sb = new StringBuilder();
         try {
-            // Load PDF document
+            Credential cred = new Credential(SecretId, SecretKey);
+            HttpProfile httpProfile = new HttpProfile();
+            httpProfile.setEndpoint("ocr.tencentcloudapi.com");
+            ClientProfile clientProfile = new ClientProfile();
+            clientProfile.setHttpProfile(httpProfile);
+            OcrClient client = new OcrClient(cred, "ap-shanghai", clientProfile);
 
+           if(PdfUtils.isPdf(file)) {  //是pdf
+               // Get the number of pages (to be used in the for loop
 
-            // Get number of pages
-            int numPages = PdfUtils.getPageCount(file);
+               int numPages = PdfUtils.getPageCount(file);
 
-            for (int i = 0; i < numPages; i++) {
-                Credential cred = new Credential(SecretId, SecretKey);
-                HttpProfile httpProfile = new HttpProfile();
-                httpProfile.setEndpoint("ocr.tencentcloudapi.com");
-                ClientProfile clientProfile = new ClientProfile();
-                clientProfile.setHttpProfile(httpProfile);
-                OcrClient client = new OcrClient(cred, "ap-shanghai", clientProfile);
+               for (int i = 0; i < numPages; i++) {
+                   GeneralBasicOCRRequest req = new GeneralBasicOCRRequest();
+                   byte[] fileContent = Files.readAllBytes(file.toPath());
+                   String encodedString = Base64.getEncoder().encodeToString(fileContent);
+                   req.setIsPdf(true);
+                   req.setImageBase64(encodedString);
+                   req.setPdfPageNumber((long) i + 1);  // Set the page number
 
-                GeneralBasicOCRRequest req = new GeneralBasicOCRRequest();
-                byte[] fileContent = Files.readAllBytes(file.toPath());
-                String encodedString = Base64.getEncoder().encodeToString(fileContent);
-                req.setIsPdf(true);
-                req.setImageBase64(encodedString);
-                req.setPdfPageNumber((long)i+1);  // Set the page number
+                   GeneralBasicOCRResponse resp = client.GeneralBasicOCR(req);
+                   String json = GeneralBasicOCRResponse.toJsonString(resp);
+                   System.out.println(json);
+                   System.out.println("-----------------------------------------------------");
 
-                GeneralBasicOCRResponse resp = client.GeneralBasicOCR(req);
-                String json = GeneralBasicOCRResponse.toJsonString(resp);
-                System.out.println(json);
-                System.out.println("-----------------------------------------------------");
+                   String context = GeneralBasicToText.generalBasicToTextV2(json);
+                   sb.append(context);
+               }
+           }else{ //是图片
+               GeneralBasicOCRRequest req = new GeneralBasicOCRRequest();
+               byte[] fileContent = Files.readAllBytes(file.toPath());
+               String encodedString = Base64.getEncoder().encodeToString(fileContent);
+               req.setImageBase64(encodedString);
 
-                String context = GeneralBasicToText.generalBasicToTextV2(json);
-                sb.append(context);
-            }
+               GeneralBasicOCRResponse resp = client.GeneralBasicOCR(req);
+               String json = GeneralBasicOCRResponse.toJsonString(resp);
+               System.out.println(json);
+               System.out.println("-----------------------------------------------------");
+
+               String context = GeneralBasicToText.generalBasicToTextV2(json);
+               sb.append(context);
+
+           }
         } catch (TencentCloudSDKException | IOException e) {
             log.info("腾讯云OCR识别失败: {}", e.getMessage());
         }

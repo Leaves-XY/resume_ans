@@ -68,6 +68,7 @@ public class PythonClient {
             try {
                 ResumeDto resumeDto = objectMapper.readValue(response.getBody(), ResumeDto.class);
                 Resume resume=ResumeDtoMapper.mapResumeDtoToResume(resumeDto);
+                resume.setResumeText(text);
                 resumeService.saveByAnalysis(resume);
                 System.out.println(resume);
                 return resume;

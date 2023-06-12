@@ -21,4 +21,9 @@ public class PdfUtils {
         }
         return numberOfPages;
     }
+
+    public static boolean isPdf(File file) {
+        String extension = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+        return extension.toLowerCase().equals("pdf");
+    }
 }

@@ -116,4 +116,8 @@ public class Resume implements Serializable {
     @TableField(typeHandler = StringTypeHandler.class)
     private List<String> projectTimes;
 
+    @ApiModelProperty(value = "简历全文")
+    @TableField("resume_text")
+    private String resumeText;
+
 }
