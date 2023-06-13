@@ -38,6 +38,9 @@ resume:
   aliyun:
     accessKeyId: LTAI5tFp8qRqigbEDRAQaDki
     accessSecret: kHLnn5vVgDPO7175MsvCDYQbZ8MEN0
+  mobile:
+    AccessKey: b07eac419c464be0846785c27f999f12
+    SecretKey: f88951d7d92649d0a16f3e3fdc23467b
 
 
 

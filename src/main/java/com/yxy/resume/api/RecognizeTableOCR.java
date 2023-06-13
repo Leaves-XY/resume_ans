@@ -9,11 +9,13 @@ import com.tencentcloudapi.ocr.v20181119.models.*;
 import com.yxy.resume.until.RecognizeTableToText;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Base64;
 
+@Component
 @Data
 public class RecognizeTableOCR
 {
