@@ -31,9 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/", "/login", "/register").permitAll()  // 主页面和登录注册页面无需登录
-                .antMatchers("/user/**", "/seek/**", "/analysis/**").authenticated() // user，seek，analysis页面只需要登录
-                .antMatchers("/recruit/**").hasAnyRole("RECRUITER", "ADMIN")  // recruit页面需要RECRUITER或者ADMIN
-                .antMatchers("/resume/**", "/jobs/**","/admin/**").hasRole("ADMIN")  // admin,resume页面 jobs页面 需要ADMIN
+                .antMatchers("/user/**", "/seek/**", "/analysis/**").permitAll() // user，seek，analysis页面只需要登录
+                .antMatchers("/recruit/**").permitAll()  // recruit页面需要RECRUITER或者ADMIN
+                .antMatchers("/resume/**", "/jobs/**","/admin/**").permitAll()  // admin,resume页面 jobs页面 需要ADMIN
                 // 添加其他的 antMatchers 和对应的权限要求
                 .and()
                 .formLogin()
@@ -44,6 +44,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutSuccessUrl("/login"); // 注销后，将用户重定向到主页面
+
+//        http
+//                .csrf().disable()
+//                .authorizeRequests()
+//                .antMatchers("/", "/login", "/register").permitAll()  // 主页面和登录注册页面无需登录
+//                .antMatchers("/user/**", "/seek/**", "/analysis/**").authenticated() // user，seek，analysis页面只需要登录
+//                .antMatchers("/recruit/**").hasAnyRole("RECRUITER", "ADMIN")  // recruit页面需要RECRUITER或者ADMIN
+//                .antMatchers("/resume/**", "/jobs/**","/admin/**").hasRole("ADMIN")  // admin,resume页面 jobs页面 需要ADMIN
+//                // 添加其他的 antMatchers 和对应的权限要求
+//                .and()
+//                .formLogin()
+//                .loginPage("/login")
+//                .failureHandler(customAuthenticationFailureHandler)  // 设置自定义的登录失败处理器
+//                .permitAll()
+//                // 添加其他的 formLogin 配置
+//                .and()
+//                .logout()
+//                .logoutSuccessUrl("/login"); // 注销后，将用户重定向到主页面
         // 添加其他的 logout 配置
     }
 
