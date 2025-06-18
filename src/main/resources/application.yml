@@ -9,7 +9,7 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://localhost:3306/resume_analysis?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
       username: root
-      password: ye3511397
+      password:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -33,14 +33,14 @@ resume:
     url: http://localhost:5555/process_text
 
   tencent:
-    SecretId: AKIDd8PUO6aAD6mHdppbliV92h8PTO5YqxGM
-    SecretKey: OwISRGMGyYzDG8pnZ81oUwCF5j8JIBtW
+    SecretId:
+    SecretKey:
   aliyun:
-    accessKeyId: LTAI5tFp8qRqigbEDRAQaDki
-    accessSecret: kHLnn5vVgDPO7175MsvCDYQbZ8MEN0
+    accessKeyId:
+    accessSecret:
   mobile:
-    AccessKey: b07eac419c464be0846785c27f999f12
-    SecretKey: f88951d7d92649d0a16f3e3fdc23467b
+    AccessKey:
+    SecretKey:
 
 
 
